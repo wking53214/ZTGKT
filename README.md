@@ -128,6 +128,10 @@ tests/
 python -m pytest -q
 ```
 
+CI runs the suite on every push and pull request across Python 3.9 through
+3.13, the full range `pyproject.toml` declares as supported. See
+[.github/workflows/tests.yml](.github/workflows/tests.yml).
+
 ## Security notes
 
 Read [docs/KNOWN_GAPS.md](docs/KNOWN_GAPS.md) before deploying. In short:
