@@ -20,8 +20,8 @@ class GateConfig:
         max_attempts: Regeneration budget. Exhausting it raises
             :class:`ztgkt.pipeline.PipelineFailure`.
         patterns: Vocabulary registry driving the guards.
-        signing_key: HMAC key. ``None`` falls back to the published archive
-            key and emits a warning.
+        signing_key: HMAC key. ``None`` uses a random per-instance key and
+            emits a warning; the published archive key is never a default.
         minimum_latency_ms: Throttle floor.
         maximum_latency_ms: Throttle ceiling.
         seconds_per_word: Throttle slope before scaling.

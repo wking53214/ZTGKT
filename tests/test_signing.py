@@ -19,10 +19,18 @@ def test_different_keys_produce_different_signatures():
     assert PayloadSigner(b"key-a").sign("x") != PayloadSigner(b"key-b").sign("x")
 
 
-def test_archive_default_key_warns():
-    with pytest.warns(UserWarning, match="ARCHIVE_DEFAULT_KEY"):
+def test_missing_key_warns_and_never_falls_back_to_the_archive_key():
+    with pytest.warns(UserWarning, match="random per-instance key"):
         signer = PayloadSigner()
-    assert signer.sign("x") == PayloadSigner(ARCHIVE_DEFAULT_KEY).sign("x")
+    assert signer.verify("x", signer.sign("x")) is True
+    assert signer.sign("x") != PayloadSigner(ARCHIVE_DEFAULT_KEY).sign("x")
+
+
+def test_archive_key_still_replays_when_passed_explicitly():
+    import hashlib
+    import hmac as _hmac
+    expected = _hmac.new(ARCHIVE_DEFAULT_KEY, b"x", hashlib.sha384).hexdigest()
+    assert PayloadSigner(ARCHIVE_DEFAULT_KEY).sign("x") == expected
 
 
 def test_empty_key_is_rejected():

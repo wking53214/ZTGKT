@@ -11,7 +11,9 @@ key in the pipeline class::
 
 A hardcoded key in source is not a secret. This module keeps that value only
 as :data:`ARCHIVE_DEFAULT_KEY`, for byte-compatible replay of archived
-signatures, and warns whenever it is used. Supply a real key in any
+signatures when passed explicitly. It is never used as a default: with no
+key, the signer generates a random one for this instance and warns, so its
+signatures verify only within the process. Supply a real key in any
 deployment that consumes the signature as evidence.
 """
 
@@ -19,6 +21,7 @@ from __future__ import annotations
 
 import hashlib
 import hmac
+import secrets
 import warnings
 
 __all__ = ["ARCHIVE_DEFAULT_KEY", "PayloadSigner"]
@@ -33,12 +36,12 @@ class PayloadSigner:
     def __init__(self, signing_key: bytes | str | None = None, digestmod=hashlib.sha384) -> None:
         if signing_key is None:
             warnings.warn(
-                "PayloadSigner is using ARCHIVE_DEFAULT_KEY, a key published in "
-                "this repository. Signatures produced with it prove nothing. "
+                "PayloadSigner has no signing_key; using a random per-instance "
+                "key, so signatures cannot be verified outside this process. "
                 "Pass signing_key= in any deployment.",
                 stacklevel=2,
             )
-            signing_key = ARCHIVE_DEFAULT_KEY
+            signing_key = secrets.token_bytes(48)
         if isinstance(signing_key, str):
             signing_key = signing_key.encode("utf-8")
         if not signing_key:
