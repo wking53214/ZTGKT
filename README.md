@@ -119,7 +119,7 @@ docs/
 reference/
   verbatim archive extracts, not imported
 tests/
-  47 tests
+  48 tests
 ```
 
 ## Tests
