@@ -119,7 +119,7 @@ docs/
 reference/
   verbatim archive extracts, not imported
 tests/
-  47 tests
+  48 tests
 ```
 
 ## Tests
@@ -137,7 +137,8 @@ CI runs the suite on every push and pull request across Python 3.9 through
 Read [docs/KNOWN_GAPS.md](docs/KNOWN_GAPS.md) before deploying. In short:
 
 - The archive hardcoded its HMAC key in source. That key is preserved only as
-  `ARCHIVE_DEFAULT_KEY` for replaying archived signatures, and using it emits a
-  warning. Pass your own `signing_key`.
+  `ARCHIVE_DEFAULT_KEY` for replaying archived signatures when passed
+  explicitly. Without a key the signer uses a random per-instance key and
+  warns. Pass your own `signing_key`.
 - Guard vocabularies are fixed word lists. They are a formatting policy, not an
   adversarial control. Do not rely on them against a motivated evader.

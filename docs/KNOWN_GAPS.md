@@ -18,8 +18,10 @@ against exactly the adversary it exists to stop.
 
 **Status: fixed, with the old value retained.** `GateConfig.signing_key` is
 the supported path. The literal survives as `ARCHIVE_DEFAULT_KEY` so archived
-signatures can be replayed and verified, and constructing a `PayloadSigner`
-without a key emits a `UserWarning`. Pass a real key in any deployment where
+signatures can be replayed and verified when it is passed explicitly. It is
+never a default: constructing a `PayloadSigner` without a key uses a random
+per-instance key (changed 2026-09-24; before that the archive key was the
+default) and emits a `UserWarning`. Pass a real key in any deployment where
 the signature is treated as evidence.
 
 ## 2. Guards do not match inflected forms
